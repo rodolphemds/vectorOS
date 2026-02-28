@@ -234,6 +234,15 @@ do_compile[nostamp] = "1"
 
 do_install () {
   run_victor ${S}/project/victor/scripts/install.sh ${BUILDSRC} ${D}
+
+  # Install custom user files from the victor source tree into rootfs.
+  # Source layout expected:
+  #   ${S}/usr/local/{bin,lib,include,etc}
+  if [ -d ${S}/usr/local ]; then
+    install -d ${D}/usr/local
+    cp -a ${S}/usr/local/. ${D}/usr/local/
+  fi
+
   # for if anyone wants to run stuff compiled with vicos-sdk clang++
   install -d ${D}/usr/lib
   install -m 0755 ${D}/anki/lib/libc++.so.1 ${D}/usr/lib/
@@ -332,3 +341,4 @@ EXCLUDE_FROM_SHLIBS = "1"
 
 FILES:${PN} += "anki/"
 FILES:${PN} += "usr/lib/"
+FILES:${PN} += "usr/local/"
